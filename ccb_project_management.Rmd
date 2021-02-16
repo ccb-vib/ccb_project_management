@@ -1,0 +1,136 @@
+---
+title: "CCB Project Management"
+author: "Theo Killian"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This document serves as a report on all of the requests received and projects
+currently completed by the CCB bioinformatics platform.
+
+## Projects
+
+The CCB bioinformatics platform receives requests for bioinformatic assistance
+on various projects. The section below explores the types and nature of these
+requested projects.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# library("kableExtra")
+library("tidyverse")
+library("lubridate")
+library("readxl")
+library("DT")
+```
+
+```{r warning=FALSE, message=FALSE}
+path <- "~/Documents/tmp/ccb_project_management/"
+ccb_proj_mgt <- read_excel(paste0(path, "/ccb_proj_mgt.xlsx"))
+# View(ccb_proj_mgt)
+
+ccb_proj_mgt %>%
+  dplyr::select(-c(remarks)) %>%
+  dplyr::mutate(date_request = as.Date(date_request)) %>% 
+  DT::datatable()
+```
+
+## Project Statistics
+
+Statistics on the CCB projects are generated to better help visualize the 
+distributions of projects types and number of requests per lab.
+
+### Histogram of Project Types
+
+Below is a histogram of the types of projects that have been requested by 
+members of labs at CCB.
+
+```{r warning=FALSE, message=FALSE}
+ccb_proj_mgt %>%
+  ggplot(aes(x = project_type, fill = unique(ccb_proj_mgt$project_type))) +
+  geom_bar(stat = "count", fill = rainbow(
+    n = length(unique(ccb_proj_mgt$project_type)))) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Histogram of Project Subtypes
+
+Below is a histogram of the subtypes of projects that have been requested by 
+members of labs at CCB.
+
+```{r warning=FALSE, message=FALSE}
+ccb_proj_mgt %>%
+  ggplot(aes(x = project_subtype, fill = unique(ccb_proj_mgt$project_subtype))) +
+  geom_bar(stat = "count", fill = rainbow(
+    n = length(unique(ccb_proj_mgt$project_subtype)))) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Histogram of Total Time Devoted to Projects
+
+Below is a histogram that displays the rough time in hours devoted to each
+project that has been requested by labs at CCB. Note "CCB" donates generate
+infrastructure projects such as bulk RNAseq pipelines which will be used by
+many labs. Red dotted line represents the theoretical maximum time available to
+devote equally to each lab (i.e. 40 hours a week, multiplied by 48 weeks,
+divided by 12 labs = approximately 180 hours available to service each lab per
+year. This calculation includes time spent in meetings, etc. but does not
+include time spent for general communally available infrastructure projects such
+as omics pipelines.)
+
+```{r warning=FALSE, message=FALSE}
+ccb_temp1 <- ccb_proj_mgt
+ccb_temp1 %>%
+  dplyr::filter(lab == "Bergers/Lambrechts") -> pan_mouse
+ccb_temp1 %>%
+  dplyr::filter(!lab == "Bergers/Lambrechts") -> ccb_temp1
+pan_hrs <- (pan_mouse$duration_hrs[1] / 2)
+pan_mouse_1 <- pan_mouse
+pan_mouse_2 <- pan_mouse
+pan_mouse_1$lab[1] <- "Bergers"
+pan_mouse_2$lab[1] <- "Lambrechts"
+pan_mouse_1$duration_hrs <- pan_hrs
+pan_mouse_2$duration_hrs <- pan_hrs
+dplyr::bind_rows(pan_mouse_1, pan_mouse_2, ccb_temp1) -> ccb_temp2
+ccb_temp2 %>% 
+  dplyr::group_by(lab) %>%
+  summarise(duration_hrs) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = lab, y = duration_hrs), stat = "identity",
+                         color = length(unique(ccb_temp2$lab)),
+                         fill = rainbow(n = length(ccb_temp2$lab))) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 180, linetype = "dotted", color = "red")
+```
+
+### Project Timeline
+
+Below is a histogram that displays the number of projects requested per month
+for the period between August 2020 and February 2021.
+
+```{r}
+ccb_proj_mgt %>%
+  dplyr::mutate(months = months(as.POSIXlt(date_request, format = "%Y%m%d"))) %>%
+  dplyr::mutate(months = factor(months, levels = unique(months))) %>%
+  group_by(months) -> ccb_month
+ccb_month %>%
+  ggplot(aes(x = months, color = months, fill = months)) +
+    geom_bar(stat = "count") +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+sessionInfo()
+```
