@@ -128,7 +128,10 @@ ccb_month %>%
   ggplot(aes(x = months, color = months, fill = months)) +
     geom_bar(stat = "count") +
     theme_classic() +
-    theme(axis.text.x = element_text(angle = 90))
+    ylim(0, 10) +
+    ylab("number of projects requested per month") +
+    theme(axis.text.x = element_text(angle = 90)) +
+    theme(legend.position = "none")
 ```
 
 ```{r}
