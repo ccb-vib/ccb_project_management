@@ -16,27 +16,25 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction
 
 This document serves as a report on all of the requests received and projects
-currently completed by the CCB bioinformatics platform.
+currently completed by the CCB bioinformatics platform since 18 August 2020.
 
 ## Projects
 
 The CCB bioinformatics platform receives requests for bioinformatic assistance
-on various projects. The section below explores the types and nature of these
-requested projects.
+on various projects. The sections below explore the types and nature of these
+requested projects. 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
-# library("kableExtra")
 library("tidyverse")
 library("lubridate")
 library("readxl")
 library("DT")
+# library("plotly")
 ```
 
 ```{r warning=FALSE, message=FALSE}
 path <- "~/Documents/tmp/ccb_project_management/"
 ccb_proj_mgt <- read_excel(paste0(path, "/ccb_proj_mgt.xlsx"))
-# View(ccb_proj_mgt)
-
 ccb_proj_mgt %>%
   dplyr::select(-c(remarks)) %>%
   dplyr::mutate(date_request = as.Date(date_request)) %>% 
@@ -45,8 +43,8 @@ ccb_proj_mgt %>%
 
 ## Project Statistics
 
-Statistics on the CCB projects are generated to better help visualize the 
-distributions of projects types and number of requests per lab.
+Statistics and figures on the CCB projects are generated in this report to
+better understand projects types and number of requests per lab at CCB-VIB.
 
 ### Histogram of Project Types
 
@@ -134,6 +132,6 @@ ccb_month %>%
     theme(legend.position = "none")
 ```
 
-```{r}
-sessionInfo()
-```
+<!-- ```{r} -->
+<!-- sessionInfo() -->
+<!-- ``` -->
