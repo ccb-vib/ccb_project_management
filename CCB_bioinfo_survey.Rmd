@@ -11,9 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-In order to assess the general state of bioinformatic needs at CCB, the heads
-of labs were surveyed with a list of questions aimed at ascertaining the
-analytical expertise and infrastructure use.
+The heads of labs were surveyed with a list of questions in order to assess the
+state of bioinformatic needs at CCB, and to ascertain analytical expertise and
+infrastructure use.
 
 ### What bioinformatic analyses does your lab primarily perform?
 
@@ -37,7 +37,7 @@ analysis but cannot keep doing this. We have also large datasets of histone
 marks, metabolites and so on.
 
 * Sarah - Juan is doing the analysis in my lab. We also will do spatial
-metabolomics (mass spec imaging)
+metabolomics (mass spec imaging).
 
 * Anna - We are planning on also doing 5C and Riboseq, as well as comprehensive
 splicing analysis.
@@ -52,9 +52,10 @@ tissue and metabolomics (in coll with Bart and Sarah)
 
 * Max - Lab members perform analyses on their own laptop.
 
-* Sarah - Juan on the VSC, the rest currently local but this is expected to change
+* Sarah - Juan on the VSC, the rest currently local but this is expected to
+change.
 
-* Anna - Lab members mostly use the VSC
+* Anna - Lab members mostly use the VSC.
 
 * Georg - I have one student that is doing this. She is very good at it but will
 leave in about 2 years I expect. And with the increasing load she may not have
@@ -64,18 +65,18 @@ enough time.
 
 ### Where do you typically store or archive your research data?
 
-* Max - KU Leuven L-Drive
+* Max - KU Leuven L-Drive.
 
-* Sarah - KU Leuven L-Drive
+* Sarah - KU Leuven L-Drive.
 
 * Anna -  We are using L- and K-drives, external drives. All published data are
 submitted to public repositories.
 
 * Georg - I think we use a server and the account of Stein Aerts.
 
-* Colinda - KU Leuven L-Drive
+* Colinda - KU Leuven L-Drive.
 
-* Patrizia - KU Leuven L- and K-drives
+* Patrizia - KU Leuven L- and K-drives.
 
 ### Do you experience any problems with data storage in the near future?
 
@@ -94,16 +95,17 @@ drive is very slow. If we continue to acquire data with this speed or even more
 (since the lab will for sure grow in the next months/years.), the costs of our
 data storage will become problematic. Therefore, we are now considering to
 purchase a NAS system for offline data storage. But of course it would be safer
-to have an online solution in the end, so we are open to other solutions as well.
+to have an online solution in the end, so we are open to other solutions as
+well.
 
 * Patrizia - Yes because we often experience L- and K- drives getting out of
 service.
 
 ### If a new dedicated CCB node was created, would members of your lab use it?
 
-* Max - I think so: usage and need are in constant increase
+* Max - I think so: usage and need are in constant increase.
 
-* Sarah - Yes, mainly Juan
+* Sarah - Yes, mainly Juan.
 
 * Anna - We are happy with the VSC service. There are some limitations, in terms
 of time or the number or running jobs. On the other hand, it is affordable, they
@@ -116,3 +118,21 @@ or lab (if possible) where members can easily access the data without actually
 altering the original data. It depends on the use and output an user want from
 it (as the new tool demands for more time to learn how to use it, unless its
 very user friendly) and unless its going to give some additional outputs.
+
+## Summary
+
+* Mostly labs appear to perform bulk RNAseq and single cell RNAseq, as well as
+other types of analyses which are unique to each lab.
+
+* Most labs who responded to the survey seemed to indicate that they suffer from
+a lack of bioinformatic capacity. 
+
+* Labs either rely on local laptops or VSC for computational tasks.
+
+* Use of the L- and K- drives is common, however there appear problems with data
+storage of large data files and a more economical solution is necessary.
+
+* Many labs who use the VSC for larger computational tasks indicate that there
+are limitations such as jobs timing out as well as limitations on numbers of
+cores, etc. If a dedicated CCB server/node was made available, labs indicate
+that it would be put to good use.
