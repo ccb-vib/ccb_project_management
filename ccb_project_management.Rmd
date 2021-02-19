@@ -29,6 +29,7 @@ library("tidyverse")
 library("lubridate")
 library("readxl")
 library("DT")
+library("viridis")
 # library("plotly")
 ```
 
@@ -53,11 +54,21 @@ members of labs at CCB.
 
 ```{r warning=FALSE, message=FALSE}
 ccb_proj_mgt %>%
-  ggplot(aes(x = project_type, fill = unique(ccb_proj_mgt$project_type))) +
-  geom_bar(stat = "count", fill = rainbow(
-    n = length(unique(ccb_proj_mgt$project_type)))) +
+  group_by(project_type) %>%
+  tally() %>%
+  arrange(n) %>% 
+  dplyr::mutate(
+    project_type = factor(project_type, levels = unique(project_type))) %>% 
+  ggplot(aes(x = project_type, y = n, fill = project_type)) +
+  geom_bar(stat = "identity") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90))
+  ylab("Type of Projects") +
+  ylab("Number of Projects") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  coord_flip() +
+  ggtitle("Types of projects that have been requested by CCB labs") -> a1
+a1
 ```
 
 ### Histogram of Project Subtypes
@@ -67,11 +78,21 @@ members of labs at CCB.
 
 ```{r warning=FALSE, message=FALSE}
 ccb_proj_mgt %>%
-  ggplot(aes(x = project_subtype, fill = unique(ccb_proj_mgt$project_subtype))) +
-  geom_bar(stat = "count", fill = rainbow(
-    n = length(unique(ccb_proj_mgt$project_subtype)))) +
+  group_by(project_subtype) %>%
+  tally() %>%
+  arrange(n) %>% 
+  dplyr::mutate(
+    project_subtype = factor(project_subtype, levels = unique(project_subtype))) %>% 
+  ggplot(aes(x = project_subtype, y = n, fill = project_subtype)) +
+  geom_bar(stat = "identity") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90))
+  ylab("Subtype of Projects") +
+  ylab("Number of Projects") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  coord_flip() +
+  ggtitle("Subtypes of projects that have been requested by CCB labs") -> a2
+a2
 ```
 
 ### Histogram of Total Time Devoted to Projects
@@ -100,16 +121,21 @@ pan_mouse_2$lab[1] <- "Lambrechts"
 pan_mouse_1$duration_hrs <- pan_hrs
 pan_mouse_2$duration_hrs <- pan_hrs
 dplyr::bind_rows(pan_mouse_1, pan_mouse_2, ccb_temp1) -> ccb_temp2
-ccb_temp2 %>% 
+ccb_temp2 %>%
   dplyr::group_by(lab) %>%
-  summarise(duration_hrs) %>% 
-  ggplot() +
-  geom_bar(mapping = aes(x = lab, y = duration_hrs), stat = "identity",
-                         color = length(unique(ccb_temp2$lab)),
-                         fill = rainbow(n = length(ccb_temp2$lab))) +
+  summarise(total_hrs = sum(duration_hrs)) %>%
+  arrange(total_hrs) %>%
+  dplyr::mutate(lab = factor(lab, levels = unique(lab))) %>% 
+  ggplot(aes(x = lab, y = total_hrs, fill = lab)) +
+  geom_bar(stat = "identity") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = 180, linetype = "dotted", color = "red")
+  xlab("Total lab hours") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  geom_hline(yintercept = 180, linetype = "dotted", color = "red") +
+  coord_flip() +
+  ggtitle("Total Time Devoted to CCB Projects by Lab") -> a3 
+a3
 ```
 
 ### Project Timeline
@@ -123,13 +149,15 @@ ccb_proj_mgt %>%
   dplyr::mutate(months = factor(months, levels = unique(months))) %>%
   group_by(months) -> ccb_month
 ccb_month %>%
-  ggplot(aes(x = months, color = months, fill = months)) +
+  ggplot(aes(x = months, fill = months)) +
     geom_bar(stat = "count") +
     theme_classic() +
     ylim(0, 10) +
     ylab("number of projects requested per month") +
-    theme(axis.text.x = element_text(angle = 90)) +
-    theme(legend.position = "none")
+    scale_fill_viridis_d() +
+    theme(legend.position = "none") +
+    ggtitle("Number of Projects requested per month since Aug 2020") -> a4
+a4
 ```
 
 <!-- ```{r} -->
