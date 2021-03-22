@@ -38,7 +38,8 @@ path <- "~/Documents/tmp/ccb_project_management/"
 ccb_proj_mgt <- read_excel(paste0(path, "/ccb_proj_mgt.xlsx"))
 ccb_proj_mgt %>%
   dplyr::select(-c(remarks)) %>%
-  dplyr::mutate(date_request = as.Date(date_request)) %>% 
+  dplyr::mutate(date_request = as.Date(date_request)) %>%
+  dplyr::arrange(desc(date_request)) %>%
   DT::datatable()
 ```
 
@@ -62,7 +63,7 @@ ccb_proj_mgt %>%
   ggplot(aes(x = project_type, y = n, fill = project_type)) +
   geom_bar(stat = "identity") +
   theme_classic() +
-  ylab("Type of Projects") +
+  xlab("Type of Projects") +
   ylab("Number of Projects") +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
@@ -86,7 +87,7 @@ ccb_proj_mgt %>%
   ggplot(aes(x = project_subtype, y = n, fill = project_subtype)) +
   geom_bar(stat = "identity") +
   theme_classic() +
-  ylab("Subtype of Projects") +
+  xlab("Subtype of Projects") +
   ylab("Number of Projects") +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
@@ -129,7 +130,8 @@ ccb_temp2 %>%
   ggplot(aes(x = lab, y = total_hrs, fill = lab)) +
   geom_bar(stat = "identity") +
   theme_classic() +
-  xlab("Total lab hours") +
+  xlab("CCB labs") +
+  ylab("Total lab hours") +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
   geom_hline(yintercept = 180, linetype = "dotted", color = "red") +
@@ -153,7 +155,7 @@ ccb_month %>%
     geom_bar(stat = "count") +
     theme_classic() +
     ylim(0, 10) +
-    ylab("number of projects requested per month") +
+    ylab("Number of projects requested per month") +
     scale_fill_viridis_d() +
     theme(legend.position = "none") +
     ggtitle("Number of Projects requested per month since Aug 2020") -> a4
