@@ -34,7 +34,7 @@ library("viridis")
 ```
 
 ```{r warning=FALSE, message=FALSE}
-path <- "~/Documents/tmp/ccb_project_management/"
+path <- "~/Documents/tmp/ccb_project_management/documents/"
 ccb_proj_mgt <- read_excel(paste0(path, "/ccb_proj_mgt.xlsx"))
 ccb_proj_mgt %>%
   dplyr::select(-c(remarks)) %>%
