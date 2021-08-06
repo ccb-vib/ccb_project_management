@@ -37,7 +37,7 @@ library("viridis")
 path <- "~/Documents/tmp/ccb_project_management/documents/"
 ccb_proj_mgt <- read_excel(paste0(path, "/ccb_proj_mgt.xlsx"))
 ccb_proj_mgt %>%
-  dplyr::select(-c(remarks)) %>%
+  dplyr::select(-c(remarks, year)) %>%
   dplyr::mutate(date_request = as.Date(date_request)) %>%
   dplyr::arrange(desc(date_request)) %>%
   DT::datatable()
@@ -55,9 +55,9 @@ members of labs at CCB.
 
 ```{r warning=FALSE, message=FALSE}
 ccb_proj_mgt %>%
-  group_by(project_type) %>%
-  tally() %>%
-  arrange(n) %>% 
+  dplyr::group_by(project_type) %>%
+  dplyr::tally() %>%
+  dplyr::arrange(n) %>% 
   dplyr::mutate(
     project_type = factor(project_type, levels = unique(project_type))) %>% 
   ggplot(aes(x = project_type, y = n, fill = project_type)) +
@@ -77,11 +77,18 @@ a1
 Below is a histogram of the subtypes of projects that have been requested by 
 members of labs at CCB.
 
+* `Benchmarking` = observing gene expression levels in publicly available datasets
+* `Infrastructure` = building or maintaining a bioinformatics pipeline
+* `DE + GSEA` = differential expression analysis with down stream GO/KEGG enrichment
+* `Biostatistics` = biostatistical analysis such as covariate analysis
+* `Data Processing` = converting a data file to a different format or perform annotation
+* `Regulatory Analysis` = high level gene network analysis
+
 ```{r warning=FALSE, message=FALSE}
 ccb_proj_mgt %>%
-  group_by(project_subtype) %>%
-  tally() %>%
-  arrange(n) %>% 
+  dplyr::group_by(project_subtype) %>%
+  dplyr::tally() %>%
+  dplyr::arrange(n) %>% 
   dplyr::mutate(
     project_subtype = factor(project_subtype, levels = unique(project_subtype))) %>% 
   ggplot(aes(x = project_subtype, y = n, fill = project_subtype)) +
@@ -121,8 +128,7 @@ pan_mouse_1$lab[1] <- "Bergers"
 pan_mouse_2$lab[1] <- "Lambrechts"
 pan_mouse_1$duration_hrs <- pan_hrs
 pan_mouse_2$duration_hrs <- pan_hrs
-dplyr::bind_rows(pan_mouse_1, pan_mouse_2, ccb_temp1) -> ccb_temp2
-ccb_temp2 %>%
+dplyr::bind_rows(pan_mouse_1, pan_mouse_2, ccb_temp1) %>%
   dplyr::group_by(lab) %>%
   summarise(total_hrs = sum(duration_hrs)) %>%
   arrange(total_hrs) %>%
@@ -143,14 +149,14 @@ a3
 ### Project Timeline
 
 Below is a histogram that displays the number of projects requested per month
-for the period between August 2020 and February 2021.
+for the period from August 2020 through `r Sys.Date()`.
 
 ```{r}
 ccb_proj_mgt %>%
   dplyr::mutate(months = months(as.POSIXlt(date_request, format = "%Y%m%d"))) %>%
+  dplyr::mutate(months = paste0(months, " ", year)) %>%
   dplyr::mutate(months = factor(months, levels = unique(months))) %>%
-  group_by(months) -> ccb_month
-ccb_month %>%
+  group_by(months) %>%
   ggplot(aes(x = months, fill = months)) +
     geom_bar(stat = "count") +
     theme_classic() +
@@ -158,6 +164,7 @@ ccb_month %>%
     ylab("Number of projects requested per month") +
     scale_fill_viridis_d() +
     theme(legend.position = "none") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     ggtitle("Number of Projects requested per month since Aug 2020") -> a4
 a4
 ```
